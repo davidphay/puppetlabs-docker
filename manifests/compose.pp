@@ -56,6 +56,7 @@ class docker::compose (
 
   $docker_compose_location           = "${install_path}/${symlink_name}${file_extension}"
   $docker_compose_location_versioned = "${install_path}/docker-compose-${version}${file_extension}"
+  $docker_plugins_path               = '/usr/local/lib/docker/cli-plugins'
 
   if $ensure == 'present' {
     if $raw_url != undef {
@@ -97,6 +98,15 @@ class docker::compose (
         require => Package['curl'],
       }
 
+      file { '/usr/local/lib/docker':
+        ensure => directory,
+      }
+
+      file { $docker_plugins_path:
+        ensure => directory,
+        require => File['/usr/local/lib/docker'],
+      }
+
       file { $docker_compose_location_versioned:
         owner   => $file_owner,
         mode    => '0755',
@@ -108,6 +118,12 @@ class docker::compose (
         ensure  => 'link',
         target  => $docker_compose_location_versioned,
         require => File[$docker_compose_location_versioned],
+      }
+
+      file { "${docker_plugins_path}/docker-compose":
+        ensure  => 'link',
+        target  => $docker_compose_location_versioned,
+        require => File[$docker_plugins_path],
       }
     }
   } else {
