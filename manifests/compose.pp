@@ -62,7 +62,12 @@ class docker::compose (
     if $raw_url != undef {
       $docker_compose_url = $raw_url
     } else {
-      $docker_compose_url = "${base_url}/${version}/docker-compose-${::kernel}-${facts['os']['hardware']}${file_extension}"
+      if $version =~ /^2.d+.d+$/ {
+        $version_prepath = 'v'
+      }
+
+      $docker_compose_url = "${base_url}/${version_prepath}${version}/docker-compose-${::kernel}-${facts['os']['hardware']}${file_extension}"
+      notify {$docker_compose_url:}
     }
 
     if $proxy != undef {
