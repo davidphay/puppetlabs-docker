@@ -66,7 +66,7 @@ class docker::compose (
         $version_prepath = 'v'
       }
 
-      $docker_compose_url = "${base_url}/${version_prepath}${version}/docker-compose-${::kernel}-${facts['os']['hardware']}${file_extension}"
+      $docker_compose_url = "${base_url}/${version_prepath}${version}/docker-compose-${facts['kernel']}-${facts['os']['hardware']}${file_extension}"
       notify {$docker_compose_url:}
     }
 
