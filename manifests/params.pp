@@ -50,6 +50,7 @@ class docker::params {
   $compose_base_url                  = 'https://github.com/docker/compose/releases/download'
   $compose_symlink_name              = 'docker-compose'
   $compose_version                   = 'latest'
+  $compose_install_path              = undef
   $no_proxy                          = undef
   $execdriver                        = undef
   $storage_driver                    = undef
@@ -98,7 +99,6 @@ class docker::params {
     $tls_cert               = "${facts['docker_program_data_path']}/docker/certs.d/server-cert.pem"
     $tls_key                = "${facts['docker_program_data_path']}/docker/certs.d/server-key.pem"
   } else {
-    $compose_install_path   = ''
     $docker_ee_package_name = 'docker-ee'
     $machine_install_path   = '/usr/local/bin'
     $tls_cacert             = '/etc/docker/tls/ca.pem'
