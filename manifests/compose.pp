@@ -92,7 +92,7 @@ class docker::compose (
     } else {
       case $facts['os']['family'] {
         'Debian': {
-          ensure_packages('docker-compose-plugin', { ensure => pick($version,$ensure), require => defined('$docker::use_upstream_package_source') ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
+          ensure_packages('docker-compose-plugin', { ensure => pick($version,$ensure), require => defined($docker::use_upstream_package_source) ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
         }
         'RedHat': {
           ensure_packages('docker-compose-plugin', { ensure => pick($version,$ensure), require => defined('$docker::use_upstream_package_source') ? { true => Yumrepo['docker'], false => undef } }) #lint:ignore:140chars lint:ignore:unquoted_string_in_selector
