@@ -29,9 +29,6 @@
 #   responsible for ensuring the URL points to the correct version and
 #   architecture.
 #
-# @param curl_ensure
-#   Whether or not the curl package is ensured by this module.
-#
 class docker::compose (
   Enum[present,absent] $ensure                 = present,
   Optional[String]               $version      = $docker::params::compose_version,
@@ -40,7 +37,6 @@ class docker::compose (
   Optional[Pattern['^((http[s]?)?:\/\/)?([^:^@]+:[^:^@]+@|)([\da-z\.-]+)\.([\da-z\.]{2,6})(:[\d])?([\/\w \.-]*)*\/?$']] $proxy = undef,
   Optional[String]               $base_url     = $docker::params::compose_base_url,
   Optional[String]               $raw_url      = undef,
-  Optional[Boolean]              $curl_ensure  = $docker::params::curl_ensure,
 ) inherits docker::params {
   if $ensure == 'present' {
     if $facts['os']['family'] == 'windows' {
@@ -92,7 +88,7 @@ class docker::compose (
     } else {
       case $facts['os']['family'] {
         'Debian': {
-          ensure_packages('docker-compose-plugin', { ensure => pick($version,$ensure), require => defined($docker::use_upstream_package_source) ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
+          ensure_packages('docker-compose-plugin', { ensure => pick($version,$ensure), require => defined('$docker::use_upstream_package_source') ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
         }
         'RedHat': {
           ensure_packages('docker-compose-plugin', { ensure => pick($version,$ensure), require => defined('$docker::use_upstream_package_source') ? { true => Yumrepo['docker'], false => undef } }) #lint:ignore:140chars lint:ignore:unquoted_string_in_selector
