@@ -49,7 +49,7 @@ class docker::params {
   $proxy                             = undef
   $compose_base_url                  = 'https://github.com/docker/compose/releases/download'
   $compose_symlink_name              = 'docker-compose'
-  $compose_version                   = '2.20.2'
+  $compose_version                   = 'latest'
   $compose_install_path              = undef
   $no_proxy                          = undef
   $execdriver                        = undef
