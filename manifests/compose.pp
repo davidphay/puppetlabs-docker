@@ -25,11 +25,6 @@ class docker::compose (
     'RedHat': {
       ensure_packages('docker-compose-plugin', { ensure => $ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Yumrepo['docker'], false => undef } }) #lint:ignore:140chars lint:ignore:unquoted_string_in_selector
     }
-    'Windows': {
-      fail('Docker compose is installed with docker machine on Windows')
-    }
-    default: {
-      fail('This module only works on Debian, RedHat or Windows.')
-    }
+    default: {}
   }
 }
