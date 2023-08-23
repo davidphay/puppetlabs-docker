@@ -13,17 +13,17 @@ class docker::compose (
 ) inherits docker::params {
 
   if $version and $ensure != 'absent' {
-    $ensure = $version
+    $package_ensure = $version
   } else {
-    $ensure = $ensure
+    $package_ensure = $ensure
   }
 
   case $facts['os']['family'] {
     'Debian': {
-      ensure_packages('docker-compose-plugin', { ensure => $ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
+      ensure_packages('docker-compose-plugin', { ensure => $package_ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
     }
     'RedHat': {
-      ensure_packages('docker-compose-plugin', { ensure => $ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Yumrepo['docker'], false => undef } }) #lint:ignore:140chars lint:ignore:unquoted_string_in_selector
+      ensure_packages('docker-compose-plugin', { ensure => $package_ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Yumrepo['docker'], false => undef } }) #lint:ignore:140chars lint:ignore:unquoted_string_in_selector
     }
     'Windows': {
       fail('Docker compose is installed with docker machine on Windows')
