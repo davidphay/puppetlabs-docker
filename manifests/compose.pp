@@ -66,11 +66,10 @@ class docker::compose (
     $docker_compose_location           = "${install_path}/${symlink_name}${file_extension}"
 
     if $version == 'latest' {
-      # TODO: should not work on Windows
-      #$docker_compose_location_versioned = "${install_path}/docker-compose-$$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)${file_extension}"
-    } else {
-      $docker_compose_location_versioned = "${install_path}/docker-compose-${version}${file_extension}"
+      $version = "2.20.2"
     }
+
+    $docker_compose_location_versioned = "${install_path}/docker-compose-${version}${file_extension}"
 
     if $ensure == 'present' {
       if $raw_url != undef {
