@@ -6,7 +6,7 @@
 #
 # @param version
 #   The version of Docker Compose to install.
-*
+#
 class docker::compose (
   Enum[present,absent] $ensure  = present,
   Optional[String]     $version = $docker::params::compose_version,
@@ -16,5 +16,20 @@ class docker::compose (
     $ensure = $version
   } else {
     $ensure = $ensure
+  }
+
+  case $facts['os']['family'] {
+    'Debian': {
+      ensure_packages('docker-compose-plugin', { ensure => $ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Apt::Source['docker'], false => undef } }) #lint:ignore:140chars
+    }
+    'RedHat': {
+      ensure_packages('docker-compose-plugin', { ensure => $ensure, require => defined(bool2str($docker::use_upstream_package_source)) ? { true => Yumrepo['docker'], false => undef } }) #lint:ignore:140chars lint:ignore:unquoted_string_in_selector
+    }
+    'Windows': {
+      fail('Docker compose is installed with docker machine on Windows')
+    }
+    default: {
+      fail('This module only works on Debian, RedHat or Windows.')
+    }
   }
 }
